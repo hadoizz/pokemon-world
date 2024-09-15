@@ -1,7 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-
 import { PokemonEvolution } from '@/types/pokemon';
 import evolutions from '~/generated/pokemon-evolution.json';
+
+// Ensure evolutions is a flat array of PokemonEvolution objects
+const flattenEvolutions = (data: any): PokemonEvolution[] => {
+  // Assuming the original data is nested
+  return data.flat();
+};
 
 export type PokemonEvolutionFilter = {
   generationId?: number;
@@ -14,16 +19,14 @@ export const getEvolutions = (
   { generationId, type }: PokemonEvolutionFilter,
   page: number = 0,
 ): PokemonEvolution[] => {
-  let data = evolutions;
+  let data = flattenEvolutions(evolutions);
 
   if (generationId) {
-    data = data.filter((pokemons) =>
-      pokemons.some((pokemon) => pokemon.generationId === generationId),
-    );
+    data = data.filter((pokemon) => pokemon.generationId === generationId);
   }
 
   if (type) {
-    data = data.filter((pokemons) => pokemons.some((pokemon) => pokemon.types.includes(type)));
+    data = data.filter((pokemon) => pokemon.types.includes(type));
   }
 
   const start = LIMIT * page;
