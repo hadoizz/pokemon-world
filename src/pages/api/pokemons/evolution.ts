@@ -22,11 +22,11 @@ export const getEvolutions = (
   let data = flattenEvolutions(evolutions);
 
   if (generationId) {
-    data = data.filter((pokemon) => pokemon.generationId === generationId);
+    data = data.filter((pokemon: PokemonEvolution) => pokemon.generationId === generationId);
   }
 
   if (type) {
-    data = data.filter((pokemon) => pokemon.types.includes(type));
+    data = data.filter((pokemon: PokemonEvolution) => pokemon.types.includes(type));
   }
 
   const start = LIMIT * page;
